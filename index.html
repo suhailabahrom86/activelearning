@@ -6,43 +6,54 @@
     <title>NotebookLM: A.D.A.B × Active Learning</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        dark: '#3E0703',
-                        primary: '#660B05',
-                        accent: '#8C1007',
-                        cream: '#FFF0C4',
+                        /* New Color Palette based on Screenshot 2026-08-25 085510.png */
+                        brand: {
+                            accent: '#FFC349',   // Warm Yellow (Gold)
+                            primary: '#525EA7',  // Indigo Blue
+                            secondary: '#5FACD3',// Sky Blue
+                            support: '#97DDE9',  // Light Aqua
+                        },
+                        dark: '#1F2940',
+                        light: '#F7F9FC',
                     },
                     fontFamily: {
                         sans: ['Inter', 'sans-serif'],
+                        display: ['Plus Jakarta Sans', 'sans-serif'],
                     }
                 }
             }
         }
     </script>
     <style>
-        body { font-family: 'Inter', sans-serif; }
-        .progress-container { width: 100%; height: 4px; background: #FFF0C4; position: fixed; top: 0; z-index: 100; }
-        .progress-bar { height: 4px; background: #8C1007; width: 0%; transition: width 0.2s; }
-        .glass-nav { background: rgba(62, 7, 3, 0.95); backdrop-filter: blur(10px); }
+        body { font-family: 'Inter', sans-serif; background-color: #F7F9FC; color: #1F2940;}
+        h1, h2, h3, h4, h5, h6 { font-family: 'Plus Jakarta Sans', sans-serif; }
+        
+        .progress-container { width: 100%; height: 4px; background: #97DDE9; position: fixed; top: 0; z-index: 100; }
+        .progress-bar { height: 4px; background: #FFC349; width: 0%; transition: width 0.2s; }
+        .glass-nav { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
         .card-hover { transition: all 0.3s ease; }
-        .card-hover:hover { transform: translateY(-4px); box-shadow: 0 10px 25px -5px rgba(102, 11, 5, 0.2); }
+        .card-hover:hover { transform: translateY(-4px); box-shadow: 0 10px 25px -5px rgba(82, 94, 167, 0.15); border-color: #525EA7;}
         .accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; }
         .accordion-content.active { max-height: 2000px; transition: max-height 0.5s ease-in; }
-        .prompt-box { background-color: #fdfbf7; border-left: 4px solid #8C1007; }
+        .prompt-box { background-color: #F7F9FC; border-left: 4px solid #525EA7; }
         
         /* Custom Scrollbar */
         ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #FFF0C4; }
-        ::-webkit-scrollbar-thumb { background: #660B05; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #3E0703; }
+        ::-webkit-scrollbar-track { background: #F7F9FC; }
+        ::-webkit-scrollbar-thumb { background: #5FACD3; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #525EA7; }
+
+        /* Typography utility classes */
+        .text-fluid-h2 { font-size: clamp(2rem, 4vw, 3rem); line-height: 1.1; letter-spacing: -0.02em; }
     </style>
 </head>
-<body class="bg-gray-50 text-gray-800 antialiased pt-16 relative">
+<body class="antialiased pt-16 relative">
 
     <!-- Progress Bar -->
     <div class="progress-container">
@@ -50,127 +61,220 @@
     </div>
 
     <!-- Navigation -->
-    <nav class="glass-nav fixed w-full top-0 z-50 shadow-lg border-b border-accent/20">
+    <nav class="glass-nav fixed w-full top-0 z-50 shadow-sm border-b border-gray-200">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16">
                 <div class="flex items-center">
-                    <a href="#" class="text-cream font-bold text-xl tracking-tight flex items-center gap-2">
-                        <i class="fa-solid fa-book-open-reader"></i> A.D.A.B × NotebookLM
+                    <a href="#" class="text-brand-primary font-display font-extrabold text-xl tracking-tight flex flex-col justify-center">
+                        <span class="leading-none">S.A.G.E.</span>
+                        <span class="text-[0.6rem] tracking-[0.15em] text-gray-500 uppercase font-sans mt-1">Learning Framework</span>
                     </a>
                 </div>
                 
-                <!-- Desktop Nav -->
+                <!-- Desktop Nav (Presenter Removed) -->
                 <div class="hidden md:flex items-center space-x-6">
-                    <a href="#home" class="text-cream/80 hover:text-white text-sm font-medium transition">Home</a>
-                    <a href="#presenter" class="text-cream/80 hover:text-white text-sm font-medium transition">Presenter</a>
-                    <a href="#lesson-design" class="text-cream/80 hover:text-white text-sm font-medium transition">Lesson Design</a>
-                    <a href="#framework" class="text-cream/80 hover:text-white text-sm font-medium transition">Framework</a>
-                    <a href="#case-study" class="text-cream/80 hover:text-white text-sm font-medium transition">Case Study</a>
-                    <a href="#resources" class="text-cream/80 hover:text-white text-sm font-medium transition">Resources</a>
+                    <a href="#home" class="text-dark hover:text-brand-primary text-sm font-medium transition">Home</a>
+                    <a href="#lesson-design" class="text-dark hover:text-brand-primary text-sm font-medium transition">Lesson Design</a>
+                    <a href="#framework" class="text-brand-primary border-b-2 border-brand-accent text-sm font-semibold transition pb-1">Framework</a>
+                    <a href="#case-study" class="text-dark hover:text-brand-primary text-sm font-medium transition">Case Study</a>
+                    <a href="#resources" class="text-dark hover:text-brand-primary text-sm font-medium transition">Resources</a>
                 </div>
 
                 <!-- Mobile menu button -->
                 <div class="md:hidden flex items-center">
-                    <button id="mobile-menu-btn" class="text-cream hover:text-white focus:outline-none">
+                    <button id="mobile-menu-btn" class="text-brand-primary hover:text-dark focus:outline-none">
                         <i class="fa-solid fa-bars text-2xl"></i>
                     </button>
                 </div>
             </div>
         </div>
         
-        <!-- Mobile Nav -->
-        <div id="mobile-menu" class="hidden md:hidden bg-dark border-t border-accent/20">
-            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-                <a href="#home" class="block px-3 py-2 text-cream hover:bg-primary rounded-md text-base font-medium">Home</a>
-                <a href="#presenter" class="block px-3 py-2 text-cream hover:bg-primary rounded-md text-base font-medium">Presenter</a>
-                <a href="#lesson-design" class="block px-3 py-2 text-cream hover:bg-primary rounded-md text-base font-medium">Lesson Design</a>
-                <a href="#framework" class="block px-3 py-2 text-cream hover:bg-primary rounded-md text-base font-medium">Framework</a>
-                <a href="#case-study" class="block px-3 py-2 text-cream hover:bg-primary rounded-md text-base font-medium">Case Study</a>
-                <a href="#resources" class="block px-3 py-2 text-cream hover:bg-primary rounded-md text-base font-medium">Resources</a>
+        <!-- Mobile Nav (Presenter Removed) -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-200 shadow-lg absolute w-full">
+            <div class="px-4 pt-2 pb-4 space-y-2">
+                <a href="#home" class="block px-3 py-2 text-dark hover:bg-light hover:text-brand-primary rounded-md text-base font-medium">Home</a>
+                <a href="#lesson-design" class="block px-3 py-2 text-dark hover:bg-light hover:text-brand-primary rounded-md text-base font-medium">Lesson Design</a>
+                <a href="#framework" class="block px-3 py-2 text-brand-primary bg-light rounded-md text-base font-semibold">Framework</a>
+                <a href="#case-study" class="block px-3 py-2 text-dark hover:bg-light hover:text-brand-primary rounded-md text-base font-medium">Case Study</a>
+                <a href="#resources" class="block px-3 py-2 text-dark hover:bg-light hover:text-brand-primary rounded-md text-base font-medium">Resources</a>
             </div>
         </div>
     </nav>
 
+    
     <!-- Hero Section -->
-    <section id="home" class="relative bg-dark pt-20 pb-24 overflow-hidden">
-        <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(#FFF0C4 1px, transparent 1px); background-size: 30px 30px;"></div>
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-            <span class="inline-block py-1 px-3 rounded-full bg-accent/30 text-cream text-sm font-semibold mb-6 border border-accent">
-                Professional Development Module
-            </span>
-            <h1 class="text-4xl md:text-6xl font-extrabold text-white tracking-tight mb-6">
-                NotebookLM: <span class="text-cream">A.D.A.B × Active Learning</span>
-            </h1>
-            <p class="mt-4 text-xl text-cream/90 max-w-3xl mx-auto font-light leading-relaxed">
-                Transforming educational delivery through AI-assisted instructional design and meaningful student engagement. Explore the CREATE, DIGEST, and REFLECT phases.
-            </p>
-            <div class="mt-10 flex justify-center gap-4">
-                <a href="#framework" class="bg-cream text-dark hover:bg-white px-8 py-3 rounded-lg font-bold transition shadow-lg flex items-center gap-2">
-                    Start Learning <i class="fa-solid fa-arrow-right"></i>
-                </a>
-                <a href="https://notebooklm.google/" target="_blank" class="bg-primary border border-accent text-cream hover:bg-accent px-8 py-3 rounded-lg font-semibold transition shadow-lg flex items-center gap-2">
-                    Open NotebookLM <i class="fa-solid fa-arrow-up-right-from-square text-sm"></i>
-                </a>
-            </div>
+    <section id="home" class="relative bg-white pt-24 pb-32 overflow-hidden border-b border-gray-100">
+        <!-- Abstract Background Elements -->
+        <div class="absolute inset-0 z-0 opacity-40">
+            <div class="absolute -top-[20%] -right-[10%] w-[50%] h-[80%] rounded-full bg-gradient-to-br from-brand-support/40 to-transparent blur-3xl"></div>
+            <div class="absolute top-[40%] -left-[10%] w-[40%] h-[60%] rounded-full bg-gradient-to-tr from-brand-secondary/20 to-transparent blur-3xl"></div>
         </div>
-    </section>
 
-    <!-- Presenter Section -->
-    <section id="presenter" class="py-20 bg-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-12">
-                <h2 class="text-3xl font-bold text-dark">Meet the Presenter</h2>
-                <div class="h-1 w-20 bg-accent mx-auto mt-4 rounded"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 flex flex-col lg:flex-row items-center gap-16">
+            
+            <!-- Left Text Content -->
+            <div class="lg:w-1/2 text-center lg:text-left">
+                <span class="inline-block py-1.5 px-4 rounded-full bg-brand-accent/20 text-dark text-xs font-bold tracking-[0.2em] uppercase mb-8 border border-brand-accent/30 shadow-sm">
+                    Educational Innovation
+                </span>
+                
+                <h1 class="font-display flex flex-col mb-6">
+                    <span class="text-[clamp(3.5rem,7vw,5.5rem)] font-extrabold text-brand-primary tracking-tighter leading-[0.95]">S.A.G.E.</span>
+                    <span class="text-[clamp(1.75rem,3.5vw,2.75rem)] font-bold tracking-tight text-brand-primary/80 mt-2">Learning Framework</span>
+                </h1>
+                
+                <p class="font-sans font-medium text-dark text-[clamp(1.125rem,2vw,1.35rem)] max-w-[60ch] leading-relaxed mx-auto lg:mx-0 mb-4">
+                    From Knowledge to Meaningful Learning
+                </p>
+                
+                <p class="font-sans text-gray-600 text-base md:text-lg max-w-[55ch] mx-auto lg:mx-0 mb-10 leading-relaxed">
+                    A structured pedagogical pathway for transforming knowledge into meaningful active learning experiences. Supported by NotebookLM.
+                </p>
+                
+                <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                    <a href="#framework" class="bg-brand-primary text-white hover:bg-brand-primary/90 px-8 py-4 rounded-xl font-semibold transition shadow-md hover:shadow-lg flex items-center justify-center gap-3 group">
+                        Explore the Framework <i class="fa-solid fa-arrow-right text-brand-accent group-hover:translate-x-1 transition-transform"></i>
+                    </a>
+                    <a href="https://notebooklm.google/" target="_blank" class="bg-white border-2 border-brand-primary text-brand-primary hover:bg-light px-8 py-4 rounded-xl font-semibold transition flex items-center justify-center gap-2">
+                        Open NotebookLM <i class="fa-solid fa-arrow-up-right-from-square text-sm"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Right Visual Graphic (New S.A.G.E. Connected Nodes) -->
+            <div class="lg:w-1/2 w-full max-w-md mx-auto">
+                <div class="relative w-full aspect-square flex items-center justify-center">
+                    <!-- Connecting lines -->
+                    <svg class="absolute inset-0 w-full h-full z-0" viewBox="0 0 100 100" preserveAspectRatio="none">
+                        <path d="M 25 25 L 75 25 L 75 75 L 25 75 Z" fill="none" stroke="#97DDE9" stroke-width="2" stroke-dasharray="4 4" class="opacity-50"/>
+                    </svg>
+                    
+                    <div class="grid grid-cols-2 gap-8 relative z-10 w-full h-full p-8">
+                        <!-- S -->
+                        <div class="bg-white rounded-2xl shadow-xl border-t-4 border-brand-accent flex flex-col items-center justify-center p-6 transform hover:scale-105 transition-transform duration-300 relative group">
+                            <div class="absolute -inset-0.5 bg-brand-accent/20 blur opacity-0 group-hover:opacity-100 transition duration-300 rounded-2xl"></div>
+                            <span class="relative font-display font-extrabold text-5xl text-brand-accent mb-2">S</span>
+                            <span class="relative font-sans text-xs font-bold tracking-widest text-dark uppercase">Source</span>
+                        </div>
+                        
+                        <!-- A -->
+                        <div class="bg-white rounded-2xl shadow-xl border-t-4 border-brand-primary flex flex-col items-center justify-center p-6 transform hover:scale-105 transition-transform duration-300 relative group">
+                            <div class="absolute -inset-0.5 bg-brand-primary/20 blur opacity-0 group-hover:opacity-100 transition duration-300 rounded-2xl"></div>
+                            <span class="relative font-display font-extrabold text-5xl text-brand-primary mb-2">A</span>
+                            <span class="relative font-sans text-xs font-bold tracking-widest text-dark uppercase">Analyse</span>
+                        </div>
+
+                        <!-- G -->
+                        <div class="bg-white rounded-2xl shadow-xl border-t-4 border-brand-secondary flex flex-col items-center justify-center p-6 transform hover:scale-105 transition-transform duration-300 relative group">
+                            <div class="absolute -inset-0.5 bg-brand-secondary/20 blur opacity-0 group-hover:opacity-100 transition duration-300 rounded-2xl"></div>
+                            <span class="relative font-display font-extrabold text-5xl text-brand-secondary mb-2">G</span>
+                            <span class="relative font-sans text-xs font-bold tracking-widest text-dark uppercase">Generate</span>
+                        </div>
+
+                        <!-- E -->
+                        <div class="bg-white rounded-2xl shadow-xl border-t-4 border-brand-support flex flex-col items-center justify-center p-6 transform hover:scale-105 transition-transform duration-300 relative group">
+                            <div class="absolute -inset-0.5 bg-brand-support/40 blur opacity-0 group-hover:opacity-100 transition duration-300 rounded-2xl"></div>
+                            <span class="relative font-display font-extrabold text-5xl text-brand-support mb-2">E</span>
+                            <span class="relative font-sans text-xs font-bold tracking-widest text-dark uppercase">Engage</span>
+                        </div>
+                    </div>
+                </div>
             </div>
             
-            <div class="max-w-4xl mx-auto bg-cream/20 rounded-2xl shadow-xl overflow-hidden border border-cream flex flex-col md:flex-row">
-                <div class="md:w-1/3 bg-primary p-8 text-center flex flex-col justify-center items-center">
-                    <div class="w-32 h-32 rounded-full bg-cream flex items-center justify-center text-primary text-5xl mb-4 shadow-inner">
-                        <i class="fa-solid fa-user-tie"></i>
+        </div>
+    </section>
+
+    
+    <!-- The S.A.G.E. Journey Framework Section -->
+    <section id="framework" class="py-24 bg-light border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-20">
+                <span class="block font-sans text-xs font-bold text-brand-secondary tracking-[0.25em] uppercase mb-4">THE S.A.G.E. JOURNEY</span>
+                <h2 class="font-display text-fluid-h2 font-extrabold text-brand-primary tracking-tight mb-4">
+                    Four stages. <br class="hidden md:block"/>One purposeful learning pathway.
+                </h2>
+                <div class="h-1 w-16 bg-brand-accent mx-auto rounded-full"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                
+                <!-- Card 1: SOURCE -->
+                <div class="bg-white rounded-2xl p-8 border border-gray-100 shadow-sm card-hover flex flex-col h-full relative overflow-hidden group">
+                    <div class="absolute top-0 left-0 w-full h-1.5 bg-brand-accent"></div>
+                    <div class="flex items-center justify-between mb-6">
+                        <span class="font-sans font-bold text-gray-300 text-lg tracking-wider">01</span>
+                        <div class="w-10 h-10 rounded-full bg-brand-accent/10 text-brand-accent flex items-center justify-center group-hover:bg-brand-accent group-hover:text-white transition-colors"><i class="fas fa-book-open"></i></div>
                     </div>
-                    <h3 class="text-xl font-bold text-white uppercase tracking-wider">Mohd. Ikhsan Bin Md. Raus</h3>
-                    <p class="text-cream/80 text-sm mt-2">Senior Lecturer</p>
+                    <h3 class="font-display font-bold text-2xl tracking-tight text-dark mb-1">SOURCE</h3>
+                    <p class="font-sans font-semibold text-brand-accent text-sm mb-4">Discover & Curate</p>
+                    <p class="font-sans font-medium text-gray-700 text-base mb-2">What knowledge do we need?</p>
+                    <p class="font-sans font-normal text-sm text-gray-500 mt-auto pt-4 border-t border-gray-100">Select credible learning sources.</p>
                 </div>
-                <div class="md:w-2/3 p-8">
-                    <h4 class="text-lg font-bold text-dark mb-4 border-b border-gray-200 pb-2">Professional Credentials</h4>
-                    <div class="flex flex-wrap gap-2 mb-6">
-                        <span class="px-3 py-1 bg-white border border-gray-200 rounded-full text-xs font-semibold text-primary shadow-sm"><i class="fa-solid fa-chalkboard-user mr-1"></i> Certified Canva Trainer</span>
-                        <span class="px-3 py-1 bg-white border border-gray-200 rounded-full text-xs font-semibold text-primary shadow-sm"><i class="fa-brands fa-google mr-1"></i> Google Certified Educator</span>
-                        <span class="px-3 py-1 bg-white border border-gray-200 rounded-full text-xs font-semibold text-primary shadow-sm"><i class="fa-solid fa-microchip mr-1"></i> Gemini Certified Educator</span>
-                        <span class="px-3 py-1 bg-white border border-gray-200 rounded-full text-xs font-semibold text-primary shadow-sm"><i class="fa-solid fa-graduation-cap mr-1"></i> Gemini Certified Faculty</span>
-                        <span class="px-3 py-1 bg-white border border-gray-200 rounded-full text-xs font-semibold text-primary shadow-sm"><i class="fa-solid fa-users mr-1"></i> Skolar Community Leader</span>
-                        <span class="px-3 py-1 bg-white border border-gray-200 rounded-full text-xs font-semibold text-primary shadow-sm"><i class="fa-solid fa-briefcase mr-1"></i> Career Coaching Consultant</span>
+
+                <!-- Card 2: ANALYSE -->
+                <div class="bg-white rounded-2xl p-8 border border-gray-100 shadow-sm card-hover flex flex-col h-full relative overflow-hidden group">
+                    <div class="absolute top-0 left-0 w-full h-1.5 bg-brand-primary"></div>
+                    <div class="flex items-center justify-between mb-6">
+                        <span class="font-sans font-bold text-gray-300 text-lg tracking-wider">02</span>
+                        <div class="w-10 h-10 rounded-full bg-brand-primary/10 text-brand-primary flex items-center justify-center group-hover:bg-brand-primary group-hover:text-white transition-colors"><i class="fas fa-search"></i></div>
                     </div>
-                    
-                    <h4 class="text-lg font-bold text-dark mb-4 border-b border-gray-200 pb-2">Connect</h4>
-                    <div class="flex flex-wrap gap-4">
-                        <a href="mailto:mohdikhsan@uitm.edu.my" class="text-primary hover:text-accent transition flex items-center gap-2"><i class="fa-solid fa-envelope"></i> Email</a>
-                        <a href="#" class="text-primary hover:text-accent transition flex items-center gap-2"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
-                        <a href="https://www.youtube.com/results?search_query=Mohd+Ikhsan+Md+Raus" target="_blank" class="text-primary hover:text-accent transition flex items-center gap-2"><i class="fa-brands fa-youtube"></i> YouTube</a>
-                    </div>
+                    <h3 class="font-display font-bold text-2xl tracking-tight text-dark mb-1">ANALYSE</h3>
+                    <p class="font-sans font-semibold text-brand-primary text-sm mb-4">Question & Understand</p>
+                    <p class="font-sans font-medium text-gray-700 text-base mb-2">What does it tell us?</p>
+                    <p class="font-sans font-normal text-sm text-gray-500 mt-auto pt-4 border-t border-gray-100">Critical inquiry and synthesis.</p>
                 </div>
+
+                <!-- Card 3: GENERATE -->
+                <div class="bg-white rounded-2xl p-8 border border-gray-100 shadow-sm card-hover flex flex-col h-full relative overflow-hidden group">
+                    <div class="absolute top-0 left-0 w-full h-1.5 bg-brand-secondary"></div>
+                    <div class="flex items-center justify-between mb-6">
+                        <span class="font-sans font-bold text-gray-300 text-lg tracking-wider">03</span>
+                        <div class="w-10 h-10 rounded-full bg-brand-secondary/10 text-brand-secondary flex items-center justify-center group-hover:bg-brand-secondary group-hover:text-white transition-colors"><i class="fas fa-lightbulb"></i></div>
+                    </div>
+                    <h3 class="font-display font-bold text-2xl tracking-tight text-dark mb-1">GENERATE</h3>
+                    <p class="font-sans font-semibold text-brand-secondary text-sm mb-4">Create & Transform</p>
+                    <p class="font-sans font-medium text-gray-700 text-base mb-2">What can we create?</p>
+                    <p class="font-sans font-normal text-sm text-gray-500 mt-auto pt-4 border-t border-gray-100">Design learning artefacts.</p>
+                </div>
+
+                <!-- Card 4: ENGAGE -->
+                <div class="bg-white rounded-2xl p-8 border border-gray-100 shadow-sm card-hover flex flex-col h-full relative overflow-hidden group">
+                    <div class="absolute top-0 left-0 w-full h-1.5 bg-brand-support"></div>
+                    <div class="flex items-center justify-between mb-6">
+                        <span class="font-sans font-bold text-gray-300 text-lg tracking-wider">04</span>
+                        <div class="w-10 h-10 rounded-full bg-brand-support/20 text-brand-primary flex items-center justify-center group-hover:bg-brand-support group-hover:text-brand-primary transition-colors"><i class="fas fa-users"></i></div>
+                    </div>
+                    <h3 class="font-display font-bold text-2xl tracking-tight text-dark mb-1">ENGAGE</h3>
+                    <p class="font-sans font-semibold text-brand-support text-sm mb-4 text-brand-primary">Apply & Participate</p>
+                    <p class="font-sans font-medium text-gray-700 text-base mb-2">How will learners use it?</p>
+                    <p class="font-sans font-normal text-sm text-gray-500 mt-auto pt-4 border-t border-gray-100">Meaningful active participation.</p>
+                </div>
+
             </div>
         </div>
     </section>
 
-    <!-- AI Lesson Design Section -->
-    <section id="lesson-design" class="py-20 bg-gray-50">
+    
+    <!-- AI Lesson Design Section (Retained Educational Content) -->
+    <section id="lesson-design" class="py-24 bg-white border-b border-gray-100">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-12">
-                <h2 class="text-3xl font-bold text-dark">AI-Assisted Lesson Design</h2>
-                <p class="text-gray-600 mt-4 max-w-2xl mx-auto">Utilise custom AI prompts to co-create high-quality, inquiry-based lesson plans in minutes.</p>
-                <div class="h-1 w-20 bg-accent mx-auto mt-4 rounded"></div>
+            <div class="mb-16">
+                <span class="block font-sans text-xs font-bold text-brand-accent tracking-[0.2em] uppercase mb-2">TOOLKIT</span>
+                <h2 class="font-display text-3xl font-extrabold text-brand-primary tracking-tight">AI-Assisted Lesson Design</h2>
+                <p class="font-sans text-gray-600 mt-4 max-w-2xl text-lg">Utilise custom AI prompts to co-create high-quality, inquiry-based lesson plans in minutes.</p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <!-- Basic Gem -->
-                <div class="bg-white rounded-xl shadow-md p-6 border-t-4 border-primary card-hover">
-                    <h3 class="text-xl font-bold text-primary mb-3 flex items-center gap-2">
-                        <i class="fa-solid fa-cube text-accent"></i> Basic Lesson Plan Prompt
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-8 card-hover relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-1.5 h-full bg-brand-secondary"></div>
+                    <h3 class="font-display text-xl font-bold text-dark mb-3 flex items-center gap-3">
+                        <div class="w-8 h-8 rounded bg-brand-secondary/10 flex items-center justify-center"><i class="fa-solid fa-cube text-brand-secondary"></i></div>
+                        Basic Lesson Plan Prompt
                     </h3>
-                    <p class="text-sm text-gray-600 mb-4">A simple prompt using the Book-end Model for quick structural generation.</p>
-                    <div class="prompt-box p-4 rounded-md text-sm text-gray-800 font-mono relative group">
-                        <button class="copy-btn absolute top-2 right-2 text-gray-400 hover:text-primary transition" title="Copy to clipboard">
+                    <p class="font-sans text-sm text-gray-600 mb-6 leading-relaxed">A simple prompt using the Book-end Model for quick structural generation.</p>
+                    <div class="prompt-box p-5 rounded-lg text-sm text-gray-700 font-mono relative group leading-relaxed shadow-inner">
+                        <button class="copy-btn absolute top-3 right-3 text-gray-400 hover:text-brand-primary transition" title="Copy to clipboard">
                             <i class="fa-regular fa-copy"></i>
                         </button>
                         Bertindak sebagai pakar kurikulum. Rangka 'Lesson Plan' untuk topik &lt;topik anda&gt; menggunakan struktur Model Book-end. Pastikan ia merangkumi:
@@ -182,19 +286,21 @@ Cadangkan aktiviti ringkas yang sesuai untuk fasa selang-seli.
                 </div>
 
                 <!-- 5E Model Gem -->
-                <div class="bg-white rounded-xl shadow-md p-6 border-t-4 border-dark card-hover">
-                    <h3 class="text-xl font-bold text-dark mb-3 flex items-center gap-2">
-                        <i class="fa-solid fa-layer-group text-accent"></i> 5E Instructional Model Generator
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-8 card-hover relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-1.5 h-full bg-brand-primary"></div>
+                    <h3 class="font-display text-xl font-bold text-dark mb-3 flex items-center gap-3">
+                        <div class="w-8 h-8 rounded bg-brand-primary/10 flex items-center justify-center"><i class="fa-solid fa-layer-group text-brand-primary"></i></div>
+                        5E Instructional Model Generator
                     </h3>
-                    <p class="text-sm text-gray-600 mb-4">An advanced setup for creating comprehensive Engage, Explore, Explain, Elaborate, and Evaluate plans.</p>
+                    <p class="font-sans text-sm text-gray-600 mb-6 leading-relaxed">An advanced setup for creating comprehensive Engage, Explore, Explain, Elaborate, and Evaluate plans.</p>
                     
-                    <button class="accordion-btn w-full bg-cream text-primary hover:bg-cream/80 font-semibold py-2 px-4 rounded text-left flex justify-between items-center transition">
+                    <button class="accordion-btn w-full bg-light border border-gray-200 text-dark hover:bg-white font-sans font-semibold py-3 px-5 rounded-lg text-left flex justify-between items-center transition">
                         <span>View Advanced 5E Prompt Setup</span>
-                        <i class="fa-solid fa-chevron-down transition-transform duration-300"></i>
+                        <i class="fa-solid fa-chevron-down text-brand-primary transition-transform duration-300"></i>
                     </button>
-                    <div class="accordion-content bg-white border border-t-0 border-cream rounded-b">
-                        <div class="p-4 prompt-box text-xs font-mono relative overflow-y-auto max-h-96">
-                            <button class="copy-btn absolute top-2 right-2 text-gray-400 hover:text-primary transition" title="Copy to clipboard">
+                    <div class="accordion-content border-x border-b border-gray-200 rounded-b-lg -mt-1 pt-1 bg-white">
+                        <div class="p-5 prompt-box text-xs font-mono relative overflow-y-auto max-h-96 leading-relaxed">
+                            <button class="copy-btn absolute top-3 right-3 text-gray-400 hover:text-brand-primary transition" title="Copy to clipboard">
                                 <i class="fa-regular fa-copy"></i>
                             </button>
 **Your Role and Task**
@@ -213,288 +319,206 @@ Your task is to help me create a comprehensive, standards-aligned 5E lesson plan
         </div>
     </section>
 
-    <!-- The Pedagogical Transformation -->
-    <section id="framework" class="py-20 bg-white">
+    
+    <!-- Case Study / Interactive Section -->
+    <section id="case-study" class="py-24 bg-light border-b border-gray-200">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
-                <span class="text-accent font-bold tracking-widest uppercase text-sm">Methodology</span>
-                <h2 class="text-3xl md:text-4xl font-bold text-dark mt-2">The Pedagogical Transformation</h2>
-                <p class="text-gray-600 mt-4 max-w-2xl mx-auto">How the framework transforms curated sources into active learner participation.</p>
-                <div class="h-1 w-24 bg-primary mx-auto mt-6 rounded"></div>
+                <span class="block font-sans text-xs font-bold text-brand-accent tracking-[0.2em] uppercase mb-2">APPLICATION</span>
+                <h2 class="font-display text-3xl font-extrabold text-brand-primary tracking-tight">S.A.G.E. In Action</h2>
+                <p class="font-sans text-gray-600 mt-3">Topic: <strong class="text-dark">Ergonomics</strong> (Semester 2, Non-CS Students).</p>
             </div>
 
-            <!-- CREATE Phase -->
-            <div class="mb-20">
-                <div class="flex items-center gap-4 mb-8">
-                    <div class="w-12 h-12 rounded-full bg-primary text-white flex items-center justify-center font-bold text-xl shadow-lg">1</div>
-                    <div>
-                        <h3 class="text-2xl font-bold text-dark">CREATE Phase</h3>
-                        <p class="text-gray-600">Design the learning experience, align with ILOs, and embed scaffolding.</p>
-                    </div>
-                </div>
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <!-- Cards for Create Prompts -->
-                    <div class="bg-gray-50 rounded-xl p-6 border border-gray-200 card-hover">
-                        <h4 class="font-bold text-primary mb-2">Master Design Blueprint</h4>
-                        <p class="text-sm text-gray-600 mb-4">Builds a 1-2 hour active lesson plan with advance organizers, HOTS, and real-world application.</p>
-                        <button class="text-accent text-sm font-semibold hover:underline" onclick="openModal('modal-create-1')">View Prompt <i class="fa-solid fa-arrow-right text-xs"></i></button>
-                    </div>
-                    <div class="bg-gray-50 rounded-xl p-6 border border-gray-200 card-hover">
-                        <h4 class="font-bold text-primary mb-2">Active Learning Generator</h4>
-                        <p class="text-sm text-gray-600 mb-4">Generates 8 different student-centered activities based on Bloom's taxonomy.</p>
-                        <button class="text-accent text-sm font-semibold hover:underline" onclick="openModal('modal-create-2')">View Prompt <i class="fa-solid fa-arrow-right text-xs"></i></button>
-                    </div>
-                    <div class="bg-gray-50 rounded-xl p-6 border border-gray-200 card-hover">
-                        <h4 class="font-bold text-primary mb-2">Case-Based PBL</h4>
-                        <p class="text-sm text-gray-600 mb-4">Creates a realistic mini-case scenario triggering critical thinking and ambiguity.</p>
-                        <button class="text-accent text-sm font-semibold hover:underline" onclick="openModal('modal-create-3')">View Prompt <i class="fa-solid fa-arrow-right text-xs"></i></button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- DIGEST Phase -->
-            <div class="mb-20">
-                <div class="flex items-center gap-4 mb-8">
-                    <div class="w-12 h-12 rounded-full bg-accent text-white flex items-center justify-center font-bold text-xl shadow-lg">2</div>
-                    <div>
-                        <h3 class="text-2xl font-bold text-dark">DIGEST Phase</h3>
-                        <p class="text-gray-600">Students process, break down, connect, and reconstruct meaning using AI as a cognitive coach.</p>
-                    </div>
-                </div>
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <div class="bg-cream/30 rounded-xl p-6 border border-cream card-hover">
-                        <h4 class="font-bold text-primary mb-2">Deep Concept Breakdown</h4>
-                        <p class="text-sm text-gray-600 mb-4">Breaks topics into 5 core concepts and explains relationships (SOLO relational level).</p>
-                        <button class="text-accent text-sm font-semibold hover:underline" onclick="openModal('modal-digest-1')">View Prompt <i class="fa-solid fa-arrow-right text-xs"></i></button>
-                    </div>
-                    <div class="bg-cream/30 rounded-xl p-6 border border-cream card-hover">
-                        <h4 class="font-bold text-primary mb-2">Compare & Contrast</h4>
-                        <p class="text-sm text-gray-600 mb-4">Generates a structured comparison table to elevate analytical thinking.</p>
-                        <button class="text-accent text-sm font-semibold hover:underline" onclick="openModal('modal-digest-2')">View Prompt <i class="fa-solid fa-arrow-right text-xs"></i></button>
-                    </div>
-                    <div class="bg-cream/30 rounded-xl p-6 border border-cream card-hover">
-                        <h4 class="font-bold text-primary mb-2">Socratic Question Generator</h4>
-                        <p class="text-sm text-gray-600 mb-4">Generates 10 questions to challenge assumptions and require justification.</p>
-                        <button class="text-accent text-sm font-semibold hover:underline" onclick="openModal('modal-digest-3')">View Prompt <i class="fa-solid fa-arrow-right text-xs"></i></button>
-                    </div>
-                </div>
-                
-                <div class="mt-6 bg-dark text-cream p-6 rounded-xl flex items-start gap-4 shadow-md">
-                    <i class="fa-solid fa-lightbulb text-2xl text-accent mt-1"></i>
-                    <div>
-                        <h4 class="font-bold mb-1">NotebookLM Smart Strategy</h4>
-                        <p class="text-sm opacity-90">Upload lecture notes or journals into NotebookLM, then prompt: <em>"Summarize key arguments, identify contradictions, extract 5 key insights, generate discussion questions."</em> This trains students to become critical readers.</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- REFLECT Phase -->
-            <div>
-                <div class="flex items-center gap-4 mb-8">
-                    <div class="w-12 h-12 rounded-full bg-dark text-cream flex items-center justify-center font-bold text-xl shadow-lg border border-accent">3</div>
-                    <div>
-                        <h3 class="text-2xl font-bold text-dark">REFLECT Phase</h3>
-                        <p class="text-gray-600">Internalise, evaluate, and transform mindset. AI acts as a metacognitive coach.</p>
-                    </div>
-                </div>
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="bg-white rounded-xl shadow-sm p-6 border-l-4 border-primary card-hover">
-                        <h4 class="font-bold text-dark mb-2">Structured Metacognitive Reflection</h4>
-                        <p class="text-sm text-gray-600 mb-4">AI asks 5 reflection questions sequentially, waiting for responses to ensure progressive deepening.</p>
-                        <button class="text-accent text-sm font-semibold hover:underline" onclick="openModal('modal-reflect-1')">View Prompt <i class="fa-solid fa-arrow-right text-xs"></i></button>
-                    </div>
-                    <div class="bg-white rounded-xl shadow-sm p-6 border-l-4 border-accent card-hover">
-                        <h4 class="font-bold text-dark mb-2">Future Self Reflection</h4>
-                        <p class="text-sm text-gray-600 mb-4">Guides future-oriented reflection to build student ownership and connect learning to career success.</p>
-                        <button class="text-accent text-sm font-semibold hover:underline" onclick="openModal('modal-reflect-2')">View Prompt <i class="fa-solid fa-arrow-right text-xs"></i></button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Case Study / Interactive Section -->
-    <section id="case-study" class="py-20 bg-gray-50 border-t border-gray-200">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-12">
-                <h2 class="text-3xl font-bold text-dark">Interactive Case Study</h2>
-                <p class="text-gray-600 mt-2">See the full sequence in action for one topic: <strong class="text-primary">Ergonomics</strong> (Semester 2, Non-CS Students).</p>
-            </div>
-
-            <!-- Tab Navigation -->
-            <div class="flex justify-center border-b border-gray-300 mb-8">
-                <button class="tab-btn active px-6 py-3 font-bold text-primary border-b-2 border-primary" data-target="tab-create">1. CREATE</button>
-                <button class="tab-btn px-6 py-3 font-semibold text-gray-500 hover:text-primary transition border-b-2 border-transparent" data-target="tab-digest">2. DIGEST</button>
-                <button class="tab-btn px-6 py-3 font-semibold text-gray-500 hover:text-primary transition border-b-2 border-transparent" data-target="tab-reflect">3. REFLECT</button>
+            <!-- Tab Navigation (Updated to 4 stages conceptually if possible, or keeping original structure with new colors) -->
+            <!-- Note: Keeping original content structure (Create/Digest/Reflect map roughly to Source-Generate/Analyse/Engage conceptually in the new framework, but sticking to provided text) -->
+            <div class="flex justify-center flex-wrap gap-2 mb-8">
+                <button class="tab-btn active px-6 py-3 font-sans font-semibold rounded-t-lg bg-white text-brand-primary border-t-4 border-brand-accent shadow-[0_-2px_10px_rgba(0,0,0,0.02)]" data-target="tab-create">1. CREATE</button>
+                <button class="tab-btn px-6 py-3 font-sans font-medium rounded-t-lg bg-transparent text-gray-500 hover:text-dark hover:bg-white/50 transition border-t-4 border-transparent" data-target="tab-digest">2. DIGEST</button>
+                <button class="tab-btn px-6 py-3 font-sans font-medium rounded-t-lg bg-transparent text-gray-500 hover:text-dark hover:bg-white/50 transition border-t-4 border-transparent" data-target="tab-reflect">3. REFLECT</button>
             </div>
 
             <!-- Tab Content -->
-            <div class="bg-white rounded-2xl shadow-lg p-8">
+            <div class="bg-white rounded-b-2xl rounded-tr-2xl shadow-sm border border-gray-200 p-8 md:p-10">
                 
                 <!-- Tab: Create -->
-                <div id="tab-create" class="tab-pane">
-                    <div class="flex items-center gap-3 mb-4">
-                        <div class="w-3 h-3 rounded-full bg-green-500"></div>
-                        <h3 class="text-xl font-bold text-dark">Lecturer Designs the Experience</h3>
+                <div id="tab-create" class="tab-pane animate-fade-in">
+                    <div class="flex items-center gap-3 mb-6 pb-4 border-b border-gray-100">
+                        <div class="w-8 h-8 rounded-full bg-brand-accent/20 flex items-center justify-center"><i class="fa-solid fa-pen-nib text-brand-accent"></i></div>
+                        <h3 class="font-display text-xl font-bold text-dark">Lecturer Designs the Experience</h3>
                     </div>
-                    <p class="mb-6 text-gray-700"><strong>Objective:</strong> Students explain basic principles, analyze risks, propose improvements, and evaluate impacts on health & productivity.</p>
+                    <p class="font-sans mb-8 text-gray-600 leading-relaxed"><span class="font-semibold text-dark">Objective:</span> Students explain basic principles, analyze risks, propose improvements, and evaluate impacts on health & productivity.</p>
                     
-                    <div class="bg-cream/30 p-6 rounded-lg border border-cream mb-6">
-                        <h4 class="font-bold text-primary mb-2"><i class="fa-solid fa-person-chalkboard"></i> In-Class Activity: Advance Organizer</h4>
-                        <p class="text-sm text-gray-700 mb-2">Show two pictures: (1) Incorrect study setup, (2) Correct workstation setup.</p>
-                        <p class="text-sm font-semibold text-accent">Question to class: "Which one is more productive? Why?"</p>
-                    </div>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="bg-light p-6 rounded-xl border border-gray-200">
+                            <h4 class="font-display font-bold text-brand-primary mb-3"><i class="fa-solid fa-person-chalkboard mr-2 text-brand-secondary"></i> In-Class Activity: Advance Organizer</h4>
+                            <p class="font-sans text-sm text-gray-600 mb-4">Show two pictures: (1) Incorrect study setup, (2) Correct workstation setup.</p>
+                            <div class="bg-brand-support/30 p-3 rounded text-sm font-semibold text-brand-primary border border-brand-support">Question: "Which one is more productive? Why?"</div>
+                        </div>
 
-                    <div class="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
-                        <h4 class="font-bold text-dark mb-2"><i class="fa-solid fa-briefcase-medical"></i> Trigger Activity: The Mini Case</h4>
-                        <p class="text-sm text-gray-700 italic border-l-4 border-gray-300 pl-4 py-2 mb-4">
-                            "Ali, a university student, studies 6 hours a day using a laptop on his bed. After 2 months, he experiences neck and wrist pain."
-                        </p>
-                        <div class="flex flex-col sm:flex-row gap-4 mt-4">
-                            <div class="bg-gray-100 p-3 rounded flex-1 text-center font-semibold text-sm text-gray-700">What is the cause?</div>
-                            <div class="bg-gray-100 p-3 rounded flex-1 text-center font-semibold text-sm text-gray-700">What are long-term risks?</div>
-                            <div class="bg-gray-100 p-3 rounded flex-1 text-center font-semibold text-sm text-gray-700">What is the solution?</div>
+                        <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+                            <h4 class="font-display font-bold text-dark mb-3"><i class="fa-solid fa-briefcase-medical mr-2 text-brand-accent"></i> Trigger Activity: The Mini Case</h4>
+                            <p class="font-sans text-sm text-gray-600 italic border-l-2 border-brand-primary pl-4 py-1 mb-5">
+                                "Ali, a university student, studies 6 hours a day using a laptop on his bed. After 2 months, he experiences neck and wrist pain."
+                            </p>
+                            <div class="flex flex-col gap-2">
+                                <div class="bg-gray-50 p-2 rounded text-center font-sans font-medium text-xs text-gray-600 border border-gray-100">What is the cause?</div>
+                                <div class="bg-gray-50 p-2 rounded text-center font-sans font-medium text-xs text-gray-600 border border-gray-100">What are long-term risks?</div>
+                                <div class="bg-gray-50 p-2 rounded text-center font-sans font-medium text-xs text-gray-600 border border-gray-100">What is the solution?</div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Tab: Digest -->
-                <div id="tab-digest" class="tab-pane hidden">
-                    <div class="flex items-center gap-3 mb-4">
-                        <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
-                        <h3 class="text-xl font-bold text-dark">Students Process & Connect Meaning</h3>
+                <div id="tab-digest" class="tab-pane hidden animate-fade-in">
+                    <div class="flex items-center gap-3 mb-6 pb-4 border-b border-gray-100">
+                         <div class="w-8 h-8 rounded-full bg-brand-primary/20 flex items-center justify-center"><i class="fa-solid fa-brain text-brand-primary"></i></div>
+                        <h3 class="font-display text-xl font-bold text-dark">Students Process & Connect Meaning</h3>
                     </div>
-                    <p class="mb-6 text-gray-700">Students now have the basic concept. Time to level up their analytical thinking.</p>
+                    <p class="font-sans mb-8 text-gray-600 leading-relaxed">Students now have the basic concept. Time to level up their analytical thinking.</p>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div class="border border-gray-200 rounded-lg p-5 bg-white">
-                            <h4 class="font-bold text-primary mb-2">Digest Activity 1: Risk Analysis</h4>
-                            <ul class="list-disc pl-5 text-sm text-gray-700 space-y-1">
-                                <li>Students take a picture of their own study setup.</li>
-                                <li>In groups, identify ergonomic risks.</li>
-                                <li>Label affected body parts.</li>
-                                <li>Propose improvements.</li>
+                        <div class="border border-gray-200 rounded-xl p-6 bg-white shadow-sm">
+                            <h4 class="font-display font-bold text-brand-primary mb-4">Digest Activity 1: Risk Analysis</h4>
+                            <ul class="font-sans list-none text-sm text-gray-600 space-y-3">
+                                <li class="flex items-start"><i class="fa-solid fa-check text-brand-secondary mt-1 mr-3"></i> Students take a picture of their own study setup.</li>
+                                <li class="flex items-start"><i class="fa-solid fa-check text-brand-secondary mt-1 mr-3"></i> In groups, identify ergonomic risks.</li>
+                                <li class="flex items-start"><i class="fa-solid fa-check text-brand-secondary mt-1 mr-3"></i> Label affected body parts.</li>
+                                <li class="flex items-start"><i class="fa-solid fa-check text-brand-secondary mt-1 mr-3"></i> Propose improvements.</li>
                             </ul>
                         </div>
-                        <div class="border border-gray-200 rounded-lg p-5 bg-white">
-                            <h4 class="font-bold text-primary mb-2">Digest Activity 2: Compare & Evaluate</h4>
-                            <p class="text-sm text-gray-700 mb-2">Use NotebookLM to structure a comparison between:</p>
-                            <div class="flex justify-between items-center bg-gray-100 p-2 rounded text-sm font-semibold">
-                                <span>Study on Bed</span>
-                                <span class="text-gray-400">vs</span>
-                                <span>Ergonomic Desk</span>
+                        <div class="border border-gray-200 rounded-xl p-6 bg-white shadow-sm">
+                            <h4 class="font-display font-bold text-brand-primary mb-4">Digest Activity 2: Compare & Evaluate</h4>
+                            <p class="font-sans text-sm text-gray-600 mb-4">Use NotebookLM to structure a comparison between:</p>
+                            <div class="flex justify-between items-center bg-light p-4 rounded-lg text-sm font-semibold border border-gray-100">
+                                <span class="text-dark">Study on Bed</span>
+                                <span class="text-brand-accent px-2 text-xs uppercase tracking-widest">vs</span>
+                                <span class="text-dark">Ergonomic Desk</span>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Tab: Reflect -->
-                <div id="tab-reflect" class="tab-pane hidden">
-                    <div class="flex items-center gap-3 mb-4">
-                        <div class="w-3 h-3 rounded-full bg-blue-500"></div>
-                        <h3 class="text-xl font-bold text-dark">Internalisation & Mindset Shift</h3>
+                <div id="tab-reflect" class="tab-pane hidden animate-fade-in">
+                    <div class="flex items-center gap-3 mb-6 pb-4 border-b border-gray-100">
+                         <div class="w-8 h-8 rounded-full bg-brand-secondary/20 flex items-center justify-center"><i class="fa-solid fa-lightbulb text-brand-secondary"></i></div>
+                        <h3 class="font-display text-xl font-bold text-dark">Internalisation & Mindset Shift</h3>
                     </div>
-                    <p class="mb-6 text-gray-700">Moving beyond "what is ergonomics" to "Do I care? Will I change my habits?"</p>
+                    <p class="font-sans mb-8 text-gray-600 leading-relaxed">Moving beyond "what is ergonomics" to "Do I care? Will I change my habits?"</p>
 
-                    <div class="bg-gradient-to-r from-primary to-dark p-6 rounded-xl text-white mb-6">
-                        <h4 class="font-bold mb-3"><i class="fa-solid fa-clipboard-check"></i> Personal Audit Check</h4>
-                        <div class="space-y-3">
-                            <label class="flex items-center gap-3 cursor-pointer">
-                                <input type="checkbox" class="w-5 h-5 accent-cream rounded">
+                    <div class="bg-brand-primary p-8 rounded-xl text-white mb-6 relative overflow-hidden shadow-md">
+                        <div class="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -mr-10 -mt-10 blur-xl"></div>
+                        <h4 class="font-display font-bold mb-5 flex items-center gap-2"><i class="fa-solid fa-clipboard-check text-brand-accent"></i> Personal Audit Check</h4>
+                        <div class="space-y-4 font-sans font-medium text-sm">
+                            <label class="flex items-center gap-4 cursor-pointer p-2 hover:bg-white/5 rounded transition">
+                                <input type="checkbox" class="w-5 h-5 accent-brand-accent rounded border-none">
                                 <span>I use a laptop more than 4 hours a day.</span>
                             </label>
-                            <label class="flex items-center gap-3 cursor-pointer">
-                                <input type="checkbox" class="w-5 h-5 accent-cream rounded">
+                            <label class="flex items-center gap-4 cursor-pointer p-2 hover:bg-white/5 rounded transition">
+                                <input type="checkbox" class="w-5 h-5 accent-brand-accent rounded border-none">
                                 <span>My screen is at eye level.</span>
                             </label>
-                            <label class="flex items-center gap-3 cursor-pointer">
-                                <input type="checkbox" class="w-5 h-5 accent-cream rounded">
+                            <label class="flex items-center gap-4 cursor-pointer p-2 hover:bg-white/5 rounded transition">
+                                <input type="checkbox" class="w-5 h-5 accent-brand-accent rounded border-none">
                                 <span>I have experienced shoulder or neck pain this semester.</span>
                             </label>
                         </div>
                     </div>
                     
-                    <p class="text-sm text-gray-600 italic text-center">In this phase, the lecturer also reflects on student engagement and activity alignment.</p>
+                    <p class="font-sans text-sm text-gray-500 italic text-center">In this phase, the lecturer also reflects on student engagement and activity alignment.</p>
                 </div>
             </div>
         </div>
     </section>
 
+    
     <!-- Resources Section -->
-    <section id="resources" class="py-20 bg-dark text-white">
+    <section id="resources" class="py-24 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex flex-col md:flex-row justify-between items-end mb-12 border-b border-white/20 pb-6">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-12 pb-6 border-b border-gray-100">
                 <div>
-                    <h2 class="text-3xl font-bold text-cream">Toolkit & Resources</h2>
-                    <p class="text-gray-300 mt-2">Access the materials required to implement the framework.</p>
+                    <span class="block font-sans text-xs font-bold text-brand-secondary tracking-[0.2em] uppercase mb-2">RESOURCES</span>
+                    <h2 class="font-display text-3xl font-extrabold text-brand-primary tracking-tight">S.A.G.E. Toolkit</h2>
+                    <p class="font-sans text-gray-600 mt-2">Access the materials required to implement the framework.</p>
                 </div>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <a href="https://notebooklm.google/" target="_blank" class="bg-white/10 hover:bg-white/20 p-6 rounded-xl transition border border-white/10 flex flex-col items-center text-center group">
-                    <i class="fa-solid fa-book-journal-whills text-4xl text-cream mb-4 group-hover:scale-110 transition-transform"></i>
-                    <h3 class="font-bold text-lg">NotebookLM</h3>
-                    <p class="text-xs text-gray-300 mt-2">Google's AI-powered research assistant.</p>
+                <a href="https://notebooklm.google/" target="_blank" class="bg-light hover:bg-white p-8 rounded-2xl transition border border-gray-200 flex flex-col items-center text-center group card-hover">
+                    <div class="w-16 h-16 rounded-full bg-brand-primary/10 flex items-center justify-center mb-4 group-hover:bg-brand-primary transition-colors">
+                        <i class="fa-solid fa-book-journal-whills text-2xl text-brand-primary group-hover:text-white transition-colors"></i>
+                    </div>
+                    <h3 class="font-display font-bold text-lg text-dark">NotebookLM</h3>
+                    <p class="font-sans text-sm text-gray-500 mt-2 leading-relaxed">Google's AI-powered research assistant.</p>
                 </a>
                 
-                <a href="https://gemini.google.com/" target="_blank" class="bg-white/10 hover:bg-white/20 p-6 rounded-xl transition border border-white/10 flex flex-col items-center text-center group">
-                    <i class="fa-solid fa-sparkles text-4xl text-cream mb-4 group-hover:scale-110 transition-transform"></i>
-                    <h3 class="font-bold text-lg">Google Gemini</h3>
-                    <p class="text-xs text-gray-300 mt-2">Generative AI for brainstorming and drafting.</p>
+                <a href="https://gemini.google.com/" target="_blank" class="bg-light hover:bg-white p-8 rounded-2xl transition border border-gray-200 flex flex-col items-center text-center group card-hover">
+                    <div class="w-16 h-16 rounded-full bg-brand-secondary/10 flex items-center justify-center mb-4 group-hover:bg-brand-secondary transition-colors">
+                        <i class="fa-solid fa-sparkles text-2xl text-brand-secondary group-hover:text-white transition-colors"></i>
+                    </div>
+                    <h3 class="font-display font-bold text-lg text-dark">Google Gemini</h3>
+                    <p class="font-sans text-sm text-gray-500 mt-2 leading-relaxed">Generative AI for brainstorming and drafting.</p>
                 </a>
 
-                <div class="bg-white/10 p-6 rounded-xl border border-white/10 flex flex-col items-center text-center opacity-80 cursor-not-allowed">
-                    <i class="fa-solid fa-file-powerpoint text-4xl text-gray-400 mb-4"></i>
-                    <h3 class="font-bold text-lg text-gray-300">Session Slideshow</h3>
-                    <p class="text-xs text-gray-400 mt-2">Reference materials (Local file)</p>
+                <div class="bg-gray-50 p-8 rounded-2xl border border-gray-200 flex flex-col items-center text-center opacity-70 cursor-not-allowed">
+                    <div class="w-16 h-16 rounded-full bg-gray-200 flex items-center justify-center mb-4">
+                        <i class="fa-solid fa-file-powerpoint text-2xl text-gray-500"></i>
+                    </div>
+                    <h3 class="font-display font-bold text-lg text-gray-700">Session Slideshow</h3>
+                    <p class="font-sans text-sm text-gray-500 mt-2">Reference materials (Local file)</p>
                 </div>
 
-                <a href="http://bit.ly/ikhsanpadletv2" target="_blank" class="bg-accent hover:bg-primary p-6 rounded-xl transition border border-accent flex flex-col items-center text-center group shadow-lg">
-                    <i class="fa-solid fa-comment-dots text-4xl text-cream mb-4 group-hover:scale-110 transition-transform"></i>
-                    <h3 class="font-bold text-lg text-cream">Session Feedback</h3>
-                    <p class="text-xs text-cream/80 mt-2">Rate this session via Padlet</p>
+                <a href="http://bit.ly/ikhsanpadletv2" target="_blank" class="bg-white p-8 rounded-2xl transition border-2 border-brand-accent flex flex-col items-center text-center group card-hover shadow-sm hover:shadow-md">
+                     <div class="w-16 h-16 rounded-full bg-brand-accent/20 flex items-center justify-center mb-4 group-hover:bg-brand-accent transition-colors">
+                        <i class="fa-solid fa-comment-dots text-2xl text-brand-accent group-hover:text-white transition-colors"></i>
+                    </div>
+                    <h3 class="font-display font-bold text-lg text-dark">Session Feedback</h3>
+                    <p class="font-sans text-sm text-gray-500 mt-2">Rate this session via Padlet</p>
                 </a>
             </div>
         </div>
     </section>
 
     <!-- Completion / Reflection -->
-    <section class="py-16 bg-cream text-dark text-center">
+    <section class="py-20 bg-brand-support/20 border-t border-brand-support/30 text-center">
         <div class="max-w-3xl mx-auto px-4">
-            <h2 class="text-2xl font-bold mb-4">Ready to transform your teaching?</h2>
-            <p class="mb-8 text-gray-700">Reflect on how you can integrate the NotebookLM and the A.D.A.B Framework to foster active learning in your own classroom.</p>
-            <a href="http://bit.ly/ikhsanpadletv2" target="_blank" class="inline-block bg-dark text-cream hover:bg-primary px-8 py-3 rounded-lg font-bold transition shadow-lg">
+            <h2 class="font-display text-2xl font-bold text-brand-primary mb-4">Ready to transform your teaching?</h2>
+            <p class="font-sans mb-8 text-gray-700 text-lg">Reflect on how you can integrate NotebookLM and the S.A.G.E. Framework to foster active learning in your own classroom.</p>
+            <a href="http://bit.ly/ikhsanpadletv2" target="_blank" class="inline-block bg-brand-primary text-white hover:bg-brand-primary/90 px-8 py-4 rounded-xl font-semibold transition shadow-md hover:shadow-lg">
                 Leave a Final Reflection
             </a>
         </div>
     </section>
 
+    
     <!-- Footer -->
-    <footer class="bg-dark border-t border-white/10 py-8 text-center">
-        <div class="max-w-7xl mx-auto px-4">
-            <p class="text-cream/60 text-sm">
-                Derived and adapted from the original active learning models by Mohd. Ikhsan Bin Md. Raus.<br>
+    <footer class="bg-brand-primary py-12 text-center border-t-4 border-brand-accent">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col items-center">
+            
+            <p class="font-display font-bold text-xl text-white mb-2">S.A.G.E. Learning Framework</p>
+            <p class="font-sans text-brand-support text-xs font-bold tracking-[0.2em] uppercase mb-6">SOURCE • ANALYSE • GENERATE • ENGAGE</p>
+            
+            <p class="font-sans text-white/70 text-sm max-w-xl mx-auto mb-8 leading-relaxed">
+                Derived and adapted from active learning models.<br>
                 NotebookLM and Gemini are trademarks of Google LLC.
             </p>
-            <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="mt-4 text-accent hover:text-cream transition text-sm">
-                <i class="fa-solid fa-arrow-up mr-1"></i> Back to Top
+            <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="text-brand-accent hover:text-white transition font-sans text-sm font-semibold flex items-center gap-2">
+                <i class="fa-solid fa-arrow-up"></i> Back to Top
             </button>
         </div>
     </footer>
 
     <!-- Modals for Prompts -->
     <!-- Modal 1: Master Blueprint -->
-    <div id="modal-create-1" class="fixed inset-0 bg-black/60 z-[100] hidden flex items-center justify-center p-4 backdrop-blur-sm transition-opacity">
-        <div class="bg-white rounded-xl max-w-2xl w-full max-h-[90vh] flex flex-col shadow-2xl">
-            <div class="flex justify-between items-center p-5 border-b border-gray-200">
-                <h3 class="font-bold text-xl text-dark">Master Design Blueprint Prompt</h3>
-                <button onclick="closeModal('modal-create-1')" class="text-gray-400 hover:text-dark text-xl"><i class="fa-solid fa-xmark"></i></button>
+    <div id="modal-create-1" class="fixed inset-0 bg-dark/60 z-[100] hidden flex items-center justify-center p-4 backdrop-blur-sm transition-opacity">
+        <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] flex flex-col shadow-2xl">
+            <div class="flex justify-between items-center p-6 border-b border-gray-100">
+                <h3 class="font-display font-bold text-xl text-brand-primary">Master Design Blueprint Prompt</h3>
+                <button onclick="closeModal('modal-create-1')" class="text-gray-400 hover:text-dark text-xl transition"><i class="fa-solid fa-xmark"></i></button>
             </div>
-            <div class="p-6 overflow-y-auto prompt-box text-sm font-mono relative m-4 rounded-md">
-                <button class="copy-btn absolute top-2 right-2 text-gray-400 hover:text-primary transition"><i class="fa-regular fa-copy"></i></button>
+            <div class="p-6 overflow-y-auto prompt-box text-sm font-mono relative m-4 rounded-lg border border-gray-200">
+                <button class="copy-btn absolute top-3 right-3 text-gray-400 hover:text-brand-primary transition bg-white rounded p-1 shadow-sm"><i class="fa-regular fa-copy"></i></button>
 You are an expert instructional designer and a specialist in higher education pedagogy.
 I am teaching [COURSE NAME] for [LEVEL OF STUDENT]. Topic: [TOPIC]
 
@@ -516,14 +540,14 @@ Make the lesson learner-centered, aligned with Constructive Alignment principles
     </div>
 
     <!-- Modal Digest 1 -->
-    <div id="modal-digest-1" class="fixed inset-0 bg-black/60 z-[100] hidden flex items-center justify-center p-4 backdrop-blur-sm transition-opacity">
-        <div class="bg-white rounded-xl max-w-2xl w-full max-h-[90vh] flex flex-col shadow-2xl">
-            <div class="flex justify-between items-center p-5 border-b border-gray-200">
-                <h3 class="font-bold text-xl text-dark">Deep Concept Breakdown</h3>
-                <button onclick="closeModal('modal-digest-1')" class="text-gray-400 hover:text-dark text-xl"><i class="fa-solid fa-xmark"></i></button>
+    <div id="modal-digest-1" class="fixed inset-0 bg-dark/60 z-[100] hidden flex items-center justify-center p-4 backdrop-blur-sm transition-opacity">
+        <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] flex flex-col shadow-2xl">
+            <div class="flex justify-between items-center p-6 border-b border-gray-100">
+                <h3 class="font-display font-bold text-xl text-brand-primary">Deep Concept Breakdown</h3>
+                <button onclick="closeModal('modal-digest-1')" class="text-gray-400 hover:text-dark text-xl transition"><i class="fa-solid fa-xmark"></i></button>
             </div>
-            <div class="p-6 overflow-y-auto prompt-box text-sm font-mono relative m-4 rounded-md">
-                <button class="copy-btn absolute top-2 right-2 text-gray-400 hover:text-primary transition"><i class="fa-regular fa-copy"></i></button>
+            <div class="p-6 overflow-y-auto prompt-box text-sm font-mono relative m-4 rounded-lg border border-gray-200">
+                <button class="copy-btn absolute top-3 right-3 text-gray-400 hover:text-brand-primary transition bg-white rounded p-1 shadow-sm"><i class="fa-regular fa-copy"></i></button>
 Act as a cognitive learning coach.
 For the topic: [TOPIC]
 
@@ -539,7 +563,17 @@ Structure the output so students can see how ideas connect. Avoid oversimplified
         </div>
     </div>
     
-    <!-- (Additional modals omitted for brevity but logic applies via the single function) -->
+    <!-- (Other modals would follow identical styling, omitted for brevity as requested previously) -->
+    
+    <style>
+        .animate-fade-in {
+            animation: fadeIn 0.4s ease-out forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
 
     <script>
         // Progress Bar
@@ -561,7 +595,8 @@ Structure the output so students can see how ideas connect. Avoid oversimplified
         const accordions = document.querySelectorAll('.accordion-btn');
         accordions.forEach(acc => {
             acc.addEventListener('click', function() {
-                this.classList.toggle('bg-cream/80');
+                this.classList.toggle('bg-white');
+                this.classList.toggle('bg-light');
                 const icon = this.querySelector('i');
                 icon.classList.toggle('rotate-180');
                 const panel = this.nextElementSibling;
@@ -576,14 +611,14 @@ Structure the output so students can see how ideas connect. Avoid oversimplified
             btn.addEventListener('click', () => {
                 // Reset all
                 tabBtns.forEach(b => {
-                    b.classList.remove('active', 'text-primary', 'border-primary');
-                    b.classList.add('text-gray-500', 'border-transparent');
+                    b.classList.remove('active', 'text-brand-primary', 'border-brand-accent', 'bg-white');
+                    b.classList.add('text-gray-500', 'border-transparent', 'bg-transparent');
                 });
                 tabPanes.forEach(p => p.classList.add('hidden'));
                 
                 // Activate clicked
-                btn.classList.remove('text-gray-500', 'border-transparent');
-                btn.classList.add('active', 'text-primary', 'border-primary');
+                btn.classList.remove('text-gray-500', 'border-transparent', 'bg-transparent');
+                btn.classList.add('active', 'text-brand-primary', 'border-brand-accent', 'bg-white');
                 const target = document.getElementById(btn.getAttribute('data-target'));
                 target.classList.remove('hidden');
             });
@@ -592,11 +627,17 @@ Structure the output so students can see how ideas connect. Avoid oversimplified
         // Modal Logic
         function openModal(id) {
             const modal = document.getElementById(id);
-            if(modal) modal.classList.remove('hidden');
+            if(modal) {
+                modal.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            }
         }
         function closeModal(id) {
             const modal = document.getElementById(id);
-            if(modal) modal.classList.add('hidden');
+            if(modal) {
+                modal.classList.add('hidden');
+                document.body.style.overflow = '';
+            }
         }
 
         // Copy to Clipboard
